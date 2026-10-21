@@ -457,6 +457,10 @@ html[data-theme="dark"] .button-small.btn {
 .listing-row, .interaction-row { display: flex; align-items: center; gap: 13px; padding: 13px 0; border-top: 1px solid var(--line); }
 .listing-row img { width: 48px; height: 58px; object-fit: cover; }
 .listing-row > div, .interaction-row > div { flex: 1; min-width: 0; }
+.listing-details label { display: flex; align-items: center; gap: 8px; margin-top: 8px; color: var(--muted); font-size: 8px; }
+.listing-details input { width: 78px; min-height: 30px; padding: 4px 7px; border: 1px solid var(--line); background: var(--bg); color: var(--ink); font-size: 10px; }
+.listing-controls { display: grid; gap: 6px; flex: 0 0 auto; }
+.listing-controls select { min-width: 90px; background: var(--bg); color: var(--ink); font-size: 9px; }
 .listing-row strong, .listing-row small, .interaction-row strong, .interaction-row small { display: block; }
 .listing-row strong, .interaction-row strong { font-size: 10px; }
 .listing-row small, .interaction-row small { margin-top: 3px; color: var(--muted); font-size: 8px; }
@@ -537,7 +541,7 @@ html[data-theme="dark"] .button-small.btn {
 .noscript-message h1 { font: 400 48px/1.05 var(--serif); }
 @keyframes fade-up { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
 @keyframes drawer-in { from { opacity: .5; transform: translateX(30px); } to { opacity: 1; transform: none; } }
-@media (max-width: 1300px) {
+@media (max-width: 1400px) {
   .masthead { padding: 0 3%; }
   .shop-nav { gap: 12px; }
   .head-tools { gap: 3px; }
@@ -596,7 +600,15 @@ html[data-theme="dark"] .button-small.btn {
   .workspace-title { display: block; }
   .workspace-title .button-outline { margin-top: 14px; }
   .workspace-panel { padding: 16px; }
+  .workspace-panel .panel-heading { flex-wrap: wrap; }
+  .workspace-panel .panel-heading > div { min-width: 0; }
+  .workspace-panel .panel-heading .demo-pill { max-width: 100%; white-space: normal; }
   .panel-heading h2 { font-size: 23px; }
+  .listing-row { display: grid; grid-template-columns: 42px minmax(0, 1fr); align-items: start; gap: 9px; }
+  .listing-row img { flex: 0 0 42px; width: 42px; height: 54px; }
+  .listing-details { min-width: 0; }
+  .listing-controls { grid-column: 2; display: grid; grid-template-columns: minmax(0, 1fr) auto; width: 100%; margin: 0; }
+  .listing-controls select { min-width: 0; width: 100%; }
   .quick-view { grid-template-columns: 1fr; }
   .quick-view > img { height: 220px; }
   .cart-row { grid-template-columns: 62px minmax(0, 1fr) auto; gap: 10px; }

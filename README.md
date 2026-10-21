@@ -31,7 +31,7 @@ These public credentials are compiled into frontend JavaScript. Login only demon
 
 - **Storefront:** premium Germany launch homepage with seven-category navigation and 210 fictional sample listings (30 per category) across architecture/design, accounting/professional services, flight fare previews, sports, children’s products, agriculture, and general shopping. Search, category filters, product details/gallery, quick view, wishlist, cart and preview-only checkout remain frontend demonstrations.
 - **Scroll-led featured product story:** a sticky chapter presentation follows scroll progress in either direction, with a progress indicator and feature copy. This project contains no genuine multi-angle image set or 3D model, so the product photograph stays still and the interface labels the view as a visual preview. It does not claim to be a real 360-degree viewer.
-- **Seller:** sample metrics, listing form, product list, stock information and local order-status updates.
+- **Seller:** dashboard metrics are calculated from the sample listing and order records. Active listings include active products and services; inventory totals physical products only; open orders exclude completed and cancelled orders; monthly sales sum paid, completed EUR orders dated in the current month. Sample order records are visibly marked as examples. Sellers can create and edit demo listings, change active status and stock, and update order payment/status fields; changes are held in page memory and reset on reload.
 - **Staff / CRM:** fictional enquiry history, reminders and message previews. Follow-ups are not sent.
 - **Administration:** fictional summaries, seller approvals, activity and setting examples.
 - **Interface:** German (default), English and French dictionaries; light/dark themes; Bootstrap responsive grid, navigation/offcanvas, forms, tables, modal and toast foundations with custom design styling.
@@ -61,7 +61,7 @@ For Netlify, connect the repository/folder and publish the project root. Leave t
 ## Limits and future integrations
 
 - Unsplash photography and external fonts/CDNs require internet access. Image error handlers show a built-in SVG fallback; verify remote assets and licensing before client or production use.
-- Cart, listing changes, reminders, seller approvals, order status and messages are local frontend demonstrations only. No successful real transaction or message is created.
+- Cart, listing changes, inventory, sample sales, reminders, seller approvals, order status and messages are frontend demonstrations only. Seller metrics recalculate from the displayed records, but the included orders and catalogue are fictional samples; changes are held in page memory and reset on reload. No successful real transaction or message is created.
 - Checkout does not process payment or create an order. The prototype does not collect real payment or customer data.
 - Flights and services are illustrative; there is no provider, search API, booking, ticket issuance or service transaction.
 - There is no backend, database, real user account, account recovery, production authentication, FX service, inventory service, or payment/messaging integration. Provider selection, security, backend work and separate testing are required before production.
@@ -69,9 +69,8 @@ For Netlify, connect the repository/folder and publish the project root. Leave t
 
 ## Verification
 
-`node --check app.js` passes. Local Playwright browser checks covered all seven category filters, search and clear, French switching, theme switching, quick view, product gallery slides and zoom, wishlist, cart quantity/removal, preview-only service details, all three demo workspace logins, seller listing creation and sample order status, staff reminder creation, and admin seller approval. The flight detail showed no add-to-cart control. The browser reported no page errors.
+`node --check app.js` and `git diff --check` pass. Local Playwright browser checks covered all seven category filters, search and clear, French switching, theme switching, quick view, product gallery slides and zoom, wishlist, cart quantity/removal, preview-only service details, all three demo workspace logins, seller listing creation/editing and stock updates, paid/completed and cancelled order updates, staff reminder creation, and admin seller approval. Seller calculations were checked with empty data, multiple physical/service listings, changed stock, completed/paid orders, cancellations, a prior-month order and a mixed-currency order. The seller workspace had no horizontal overflow at 320px, 390px or 1366px. The flight detail showed no add-to-cart control. The browser reported no page errors.
 
 At 390px and 320px viewport widths, `document.documentElement.scrollWidth` matched the viewport width; the responsive category navigation remains horizontally scrollable within its own row. The mobile header keeps language, theme, cart and menu controls visible; search, wishlist and account are available from the menu.
 
 All catalogue, workspace and transaction data remains fictional and browser-local. Flight routes/fares, professional service prices, shipping and inventory are sample content. No live flight search or booking, provider contact, checkout, payment, order creation, currency conversion, authentication, backend or database is connected. Remote photos, fonts and Bootstrap/Font Awesome CDNs need an internet connection.
-
