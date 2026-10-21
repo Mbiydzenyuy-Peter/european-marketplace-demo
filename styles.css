@@ -234,6 +234,22 @@ html[data-theme="dark"] .button-small.btn {
   transition: transform .25s ease;
 }
 .shop-nav button:hover::after, .shop-nav button:focus-visible::after { transform: scaleX(1); }
+.shop-nav .nav-demo-login {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 9px 12px;
+  border: 1px solid var(--gold);
+  background: var(--paper);
+  color: var(--ink);
+  white-space: nowrap;
+}
+.shop-nav .nav-demo-login::after { display: none; }
+.shop-nav .nav-demo-login:hover,
+.shop-nav .nav-demo-login:focus-visible {
+  background: var(--gold);
+  color: #211c14;
+}
 .head-tools { display: flex; align-items: center; gap: clamp(5px, .9vw, 16px); }
 .masthead .fa-solid, .masthead .fa-regular { color: inherit; }
 .mobile-nav { display: none; }
@@ -248,6 +264,13 @@ html[data-theme="dark"] .button-small.btn {
   text-align: left;
   text-decoration: none;
 }
+.mobile-nav .offcanvas-body .demo-menu-login {
+  margin-top: 12px;
+  border: 1px solid var(--gold);
+  color: var(--ink);
+  font-weight: 600;
+}
+.mobile-nav .offcanvas-body .demo-menu-login i { margin-right: 8px; color: var(--accent); }
 .workspace-ribbon {
   display: flex;
   justify-content: space-between;
@@ -520,6 +543,11 @@ html[data-theme="dark"] .button-small.btn {
   .head-tools { gap: 3px; }
   .icon-label small { display: none; }
   .workspace { padding-right: 4%; padding-left: 4%; }
+}
+@media (max-width: 1150px) {
+  .masthead .shop-nav { display: none; }
+  .mobile-toggle { display: inline-flex; }
+  .mobile-nav { display: block; }
 }
 @media (max-width: 900px) {
   html { scroll-padding-top: 72px; }
