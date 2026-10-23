@@ -95,16 +95,19 @@
       state.user = null;
       try { sessionStorage.removeItem('mp-token'); } catch {}
     }
-    if (!response.ok || envelope?.success === false) {
-      const messageKey = response.status === 401 ? 'loginRequired'
-        : response.status === 403 ? 'forbidden'
-          : response.status === 404 ? 'notFound'
-            : response.status === 409 ? 'conflict'
-              : response.status === 422 ? 'validationError'
-                : response.status === 429 ? 'rateLimited'
-                  : response.status >= 500 ? 'apiError' : 'requestFailed';
+    const serverFailure = response.status >= 500 || envelope?.message === 'Server Error'
+      || !response.headers.get('content-type')?.toLowerCase().includes('application/json');
+    if (!response.ok || !envelope || envelope.success !== true) {
+      const status = serverFailure ? 500 : response.status;
+      const messageKey = status === 401 ? 'loginRequired'
+        : status === 403 ? 'forbidden'
+          : status === 404 ? 'notFound'
+            : status === 409 ? 'conflict'
+              : status === 422 ? 'validationError'
+                : status === 429 ? 'rateLimited'
+                  : serverFailure ? 'apiError' : 'requestFailed';
       const error = new Error(t(messageKey));
-      error.status = response.status;
+      error.status = status;
       throw error;
     }
     return envelope?.data ?? envelope;
