@@ -42,10 +42,13 @@
       return [];
     }
   })();
+  const storedToken = (() => {
+    try { return sessionStorage.getItem('mp-token') || null; } catch { return null; }
+  })();
   const state = {
     lang: localStorage.getItem('mp-lang') || 'de',
     theme: localStorage.getItem('mp-theme') || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'),
-    token: null, user: null, page: 'store', categories: [], listings: [], listing: null, cart: null, orderNotice: '',
+    token: storedToken, user: null, page: 'store', categories: [], listings: [], listing: null, cart: null, orderNotice: '',
     orders: [], sellerListings: [], sellerOrders: [], adminDashboard: null, pendingListings: [], pendingSellers: [],
     category: '', type: '', query: '', loading: false, error: '', authMode: 'login', listingEdit: null,
     heroSlide: 0, heroPaused: false, wishlist: storedWishlist, wishlistOnly: false
@@ -90,6 +93,7 @@
     if (response.status === 401 && state.token) {
       state.token = null;
       state.user = null;
+      try { sessionStorage.removeItem('mp-token'); } catch {}
     }
     if (!response.ok || envelope?.success === false) {
       const messageKey = response.status === 401 ? 'loginRequired'
@@ -155,7 +159,7 @@
           <button class="icon-button wishlist-button" data-open-wishlist aria-label="${esc(t('wishlist'))}" title="${esc(t('wishlist'))}"><i class="fa-regular fa-heart" aria-hidden="true"></i>${state.wishlist.length ? `<span class="wishlist-count">${state.wishlist.length}</span>` : ''}</button>
           <select class="language-select" aria-label="${esc(t('language'))}" data-setting="lang"><option value="de" ${state.lang === 'de' ? 'selected' : ''}>DE</option><option value="en" ${state.lang === 'en' ? 'selected' : ''}>EN</option><option value="fr" ${state.lang === 'fr' ? 'selected' : ''}>FR</option></select>
           <button class="icon-button" data-setting="theme" aria-label="${esc(t('theme'))}"><i class="fa-regular fa-moon"></i></button>
-          <button class="icon-button header-cart" data-page="cart" aria-label="${esc(t('cart'))}" title="${esc(t('cart'))}"><i class="fa-solid fa-bag-shopping"></i></button>
+          <button class="icon-button header-cart" data-page="cart" aria-label="${esc(t('cart'))}" title="${esc(t('cart'))}"><i class="fa-solid fa-bag-shopping"></i>${state.cart?.items?.length ? `<span class="wishlist-count">${state.cart.items.reduce((count, item) => count + (Number(item.quantity) || 0), 0)}</span>` : ''}</button>
           <button class="account-button" data-page="${state.token ? 'account' : 'login'}"><i class="fa-regular fa-user" aria-hidden="true"></i><span>${esc(state.token ? (state.user?.name || t('account')) : t('account'))}</span></button>
         </div>
       </header>
@@ -505,7 +509,7 @@
     if (action.dataset.action === 'slide-to') { state.slide = Number(action.dataset.index) || 0; render(); }
     if (action.dataset.action === 'add-cart') {
       if (!state.token) { state.page = 'login'; render(); return; }
-      try { await api('/cart/items', { method: 'POST', body: { listing_id: action.dataset.id, quantity: 1 } }); notify(t('addCart')); }
+      try { await api('/cart/items', { method: 'POST', body: { listing_id: action.dataset.id, quantity: 1 } }); state.cart = await api('/cart'); render(); notify(t('addCart')); }
       catch (error) { notify(error.message, true); }
     }
     if (action.dataset.action === 'remove-cart') {
@@ -515,7 +519,9 @@
     if (action.dataset.action === 'logout') {
       try {
         await api('/logout', { method: 'POST' });
-        state.token = null; state.user = null; state.cart = null; state.orders = []; state.page = 'store'; render();
+        state.token = null; state.user = null; state.cart = null; state.orders = []; state.page = 'store';
+        try { sessionStorage.removeItem('mp-token'); } catch {}
+        render();
       } catch (error) {
         if (!state.token) { state.user = null; state.cart = null; state.orders = []; state.page = 'store'; render(); }
         else notify(error.message, true);
@@ -600,6 +606,7 @@
         const data = await api(registering ? '/register' : '/login', { method: 'POST', body });
         state.token = data?.token || data?.access_token || data?.plainTextToken;
         if (!state.token) throw new Error(registering ? t('registerError') : t('loginError'));
+        try { sessionStorage.setItem('mp-token', state.token); } catch {}
         state.user = data?.user || null;
         await refreshUser();
         state.page = 'account'; render(); return;
@@ -662,5 +669,6 @@
     if (theme) { state.theme = theme.checked ? 'dark' : 'light'; localStorage.setItem('mp-theme', state.theme); render(); }
   });
   render();
-  loadCatalog();
+  Promise.resolve(state.token ? refreshUser().catch(() => { state.token = null; try { sessionStorage.removeItem('mp-token'); } catch {} }) : null)
+    .finally(() => { render(); loadCatalog(); });
 })();
