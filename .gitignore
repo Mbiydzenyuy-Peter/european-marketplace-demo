@@ -4,3 +4,13 @@ Thumbs.db
 .env
 .env.*
 !.env.example
+*.pem
+*.key
+*service-account*.json
+*serviceaccount*.json
+firebase-credentials*.json
+firebase-adminsdk*.json
+dist/
+.tmp-marketplace-tests/
+.tmp-category-image-review/
+.tmp-phpunit-cache/

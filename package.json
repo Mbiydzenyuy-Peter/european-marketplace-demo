@@ -1,0 +1,1 @@
+{"name":"european-marketplace-static","private":true,"scripts":{"build":"node build.mjs","serve":"node serve.mjs"}}
